@@ -52,6 +52,16 @@ XARGO_RUST_SRC=\path\to\rust-xtensa\library
 RUSTC=\path\to\rust-xtensa\build\x86_64-pc-windows-msvc\stage2\bin\rustc
 ```
 
+### Recommended build method - Docker
+
+In order to build a Dockerimage which includes the whole toolchain including espflash run:
+
+```cmd
+git clone --depth 1 https://github.com/MabezDev/xtensa-rust-quickstart.git
+cd xtensa-rust-quickstart
+docker build -t espflash .
+```
+
 ## Manual llvm build instructions
 
 If you would like to build the llvm fork separately, follow the instructions below.
@@ -153,6 +163,12 @@ $ cargo espflash --chip esp32 --example esp32 --speed 460800 --features="xtensa-
 ```bash
 # Example for the ESP8266, remember to use `target = xtensa-esp8266-none-elf` inside `.cargo/config`
 $ cargo espflash --chip esp8266 --example esp8266 --features="xtensa-lx-rt/lx106 xtensa-lx/lx106 esp8266-hal" /dev/ttyUSB0
+```
+
+Assuming you built and tagged the Dockerimage as described above run the following to flash using the Dockerimage.
+
+```
+docker run -v "$(pwd):/espflash" --device=/dev/ttyUSB0 -ti espflash --release --tool=cargo --chip=esp32 --example=esp32 --features="xtensa-lx-rt/lx6 xtensa-lx/lx6 esp32-hal" /dev/ttyUSB0
 ```
 
 ## Resources
